@@ -1,69 +1,189 @@
-# Dokumentasi Server & Infrastruktur E-Banner
+# Dokumentasi Setup & Deployment Server E-Banner
 
-Dokumen ini memuat spesifikasi teknis, kredensial konfigurasi, perintah pemeliharaan, dan prosedur pengelolaan server produksi E-Banner Prodi Informatika.
-
----
-
-## 1. Ringkasan Lingkungan Server
-
-| Parameter | Konfigurasi |
-|---|---|
-| Domain Publik | `https://e-banner.sakera.id` |
-| IP Lokal Server | `10.100.1.19` |
-| Sistem Operasi | Ubuntu 24.04 LTS (Proxmox VE Virtual Machine) |
-| Hostname | `e-banner` |
-| Web Server | Nginx 1.24.0 |
-| PHP Runtime | PHP 8.3-FPM (`php8.3-fpm`) |
-| Basis Data | MariaDB 10.11+ |
-| Direktori Aplikasi | `/var/www/videowall` |
-| Reverse Proxy / SSL | Cloudflare Proxy (Fleksibel / Full SSL) |
+Dokumen ini memuat panduan menyeluruh mulai dari akses web shell awal, instalasi dependensi, konfigurasi basis data, kloning repositori, hingga prosedur pembaruan kode produksi.
 
 ---
 
-## 2. Akses Masuk Server (SSH)
+## 1. Identitas & Akses Server Awal
 
-Akses terminal menggunakan akun `root` melalui jaringan lokal prodi atau VPN kampus:
+Akses awal terminal server disediakan melalui antarmuka web shell internal:
+
+- **Alamat Web Shell**: `https://ssh1.sakera.my.id/`
+- **Username Web Shell**: `ssh1erepo`
+- **Password Web Shell**: `erepo@2026`
+- **Hostname Server**: `e-banner`
+- **IP Lokal Server**: `10.100.1.19`
+- **Domain Publik Aplikasi**: `https://e-banner.sakera.id`
+
+### Langkah Masuk ke Terminal Server
+1. Buka browser dan akses alamat `https://ssh1.sakera.my.id/`.
+2. Masukkan username `ssh1erepo` dan password `erepo@2026`.
+3. Setelah masuk ke console, beralih ke user root jika belum berada di sesi root:
+   ```bash
+   sudo su
+   ```
+4. Pastikan prompt terminal aktif menampilkan:
+   ```text
+   root@e-banner:~#
+   ```
+
+---
+
+## 2. Pemeriksaan Kondisi Awal Server (Requirements Check)
+
+Sebelum instalasi, periksa paket yang sudah terpasang dan paket yang belum tersedia:
 
 ```bash
-ssh root@10.100.1.19
+php -v        # Cek PHP (belum terpasang)
+composer -v   # Cek Composer (belum terpasang)
+nginx -v      # Cek Nginx (sudah terpasang versi 1.24)
+git -v        # Cek Git (belum terpasang)
+mariadb -v    # Cek Basis Data (belum terpasang)
 ```
 
-Jika menggunakan Proxmox Web GUI, buka menu **Node > e-banner > Console (noVNC)**.
+Hasil pemeriksaan menunjukkan server baru memiliki Nginx. Paket PHP, Composer, Git, dan MariaDB harus dipasang manual.
 
 ---
 
-## 3. Konfigurasi Basis Data (MariaDB)
+## 3. Instalasi Paket & Ekstensi Pendukung
 
-### Kredensial Basis Data
-- **Host**: `127.0.0.1` (Port `3306`)
-- **Nama Basis Data**: `videowall_db`
-- **Username**: `videowall_user`
-- **Password**: `PasswordProdi2026!`
+Jalankan pembaruan repositori Ubuntu 24.04 dan pasang paket yang dibutuhkan Laravel 12:
 
-### Perintah Masuk CLI Basis Data
+### A. Update Sistem & Paket Utilitas
 ```bash
-mariadb -u videowall_user -p videowall_db
+apt update && apt upgrade -y
+apt install -y git curl unzip zip software-properties-common
 ```
 
-### Pembuatan Ulang Akun Basis Data (Jika Diperlukan)
+### B. Install PHP 8.3-FPM & Ekstensi Wajib
+```bash
+apt install -y php8.3-fpm php8.3-cli php8.3-mysql php8.3-curl php8.3-gd php8.3-mbstring php8.3-xml php8.3-zip php8.3-bcmath php8.3-intl
+```
+
+### C. Install Composer
+```bash
+apt install -y composer
+```
+Periksa hasil instalasi:
+```bash
+composer -v
+```
+
+### D. Install & Aktifkan MariaDB Server
+```bash
+apt install -y mariadb-server
+systemctl start mariadb
+systemctl enable mariadb
+```
+
+---
+
+## 4. Konfigurasi Basis Data (MariaDB)
+
+Masuk ke console MariaDB sebagai root:
+```bash
+mariadb -u root
+```
+
+Jalankan perintah SQL berikut untuk membuat database dan akun user khusus aplikasi:
 ```sql
-CREATE DATABASE IF NOT EXISTS videowall_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER IF NOT EXISTS 'videowall_user'@'localhost' IDENTIFIED BY 'PasswordProdi2026!';
+CREATE DATABASE videowall_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'videowall_user'@'localhost' IDENTIFIED BY 'PasswordProdi2026!';
 GRANT ALL PRIVILEGES ON videowall_db.* TO 'videowall_user'@'localhost';
 FLUSH PRIVILEGES;
+EXIT;
 ```
 
 ---
 
-## 4. Konfigurasi Nginx & PHP-FPM
+## 5. Kloning Repositori & Setup Dependensi Laravel
 
-### Lokasi File Konfigurasi
-- Konfigurasi Virtual Host: `/etc/nginx/sites-available/videowall`
-- Symlink Aktif: `/etc/nginx/sites-enabled/videowall`
-- Konfigurasi PHP-FPM: `/etc/php/8.3/fpm/php.ini`
-- Pool PHP-FPM: `/etc/php/8.3/fpm/pool.d/www.conf`
+Masuk ke direktori web server `/var/www` dan unduh kode program dari GitHub:
 
-### Konfigurasi Nginx Aktif
+```bash
+cd /var/www
+git clone https://github.com/myyerr/videowall.git videowall
+cd /var/www/videowall
+```
+
+*(Catatan: Jika repositori bersifat privat, gunakan Personal Access Token GitHub saat diminta password atau sematkan token langsung pada tautan git clone)*.
+
+Pasang paket pustaka PHP menggunakan Composer:
+```bash
+composer install --no-dev --optimize-autoloader
+```
+
+---
+
+## 6. Konfigurasi Environment (`.env`) & Migrasi Database
+
+Salin file contoh konfigurasi ke file `.env` aktif:
+```bash
+cp .env.example .env
+nano .env
+```
+
+Sesuaikan baris-baris kunci berikut:
+```ini
+APP_NAME="E-Banner Informatika"
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://e-banner.sakera.id
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=videowall_db
+DB_USERNAME=videowall_user
+DB_PASSWORD=PasswordProdi2026!
+
+BROADCAST_CONNECTION=log
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=database
+SESSION_DRIVER=database
+```
+Simpan file dengan menekan `Ctrl + O`, `Enter`, lalu keluar dengan `Ctrl + X`.
+
+Jalankan perintah inisialisasi Laravel:
+```bash
+php artisan key:generate
+php artisan storage:link
+php artisan migrate --seed
+```
+
+Perintah `--seed` otomatis mendaftarkan akun administrator default:
+- **Email**: `admin@visionwall.local`
+- **Password**: `password`
+
+---
+
+## 7. Penyesuaian Limit Upload PHP & Izin Hak Akses Folder
+
+Video latar belakang e-banner berukuran puluhan megabyte. Naikkan batas upload bawaan PHP dari 2 MB menjadi 100 MB:
+
+```bash
+sed -i 's/upload_max_filesize = .*/upload_max_filesize = 100M/' /etc/php/8.3/fpm/php.ini
+sed -i 's/post_max_size = .*/post_max_size = 100M/' /etc/php/8.3/fpm/php.ini
+sed -i 's/memory_limit = .*/memory_limit = 256M/' /etc/php/8.3/fpm/php.ini
+systemctl restart php8.3-fpm
+```
+
+Berikan izin kepemilikan folder data kepada pengguna web server (`www-data`):
+```bash
+chown -R www-data:www-data /var/www/videowall/storage /var/www/videowall/bootstrap/cache
+chmod -R 775 /var/www/videowall/storage /var/www/videowall/bootstrap/cache
+```
+
+---
+
+## 8. Konfigurasi Virtual Host Nginx
+
+Buat file konfigurasi web server untuk E-Banner:
+```bash
+nano /etc/nginx/sites-available/videowall
+```
+
+Tempelkan konfigurasi berikut:
 ```nginx
 server {
     listen 80;
@@ -89,99 +209,53 @@ server {
 }
 ```
 
-### Parameter Kunci PHP (`/etc/php/8.3/fpm/php.ini`)
-- `upload_max_filesize = 100M`
-- `post_max_size = 100M`
-- `memory_limit = 256M`
-- `max_execution_time = 300`
-
----
-
-## 5. Perintah Manajemen Layanan
-
-### Cek Status Layanan
+Aktifkan konfigurasi dan hapus konfigurasi default Nginx:
 ```bash
-systemctl status nginx
-systemctl status php8.3-fpm
-systemctl status mariadb
-```
-
-### Restart Layanan
-```bash
-systemctl restart nginx
-systemctl restart php8.3-fpm
-systemctl restart mariadb
-```
-
-### Uji Sintaks Konfigurasi Nginx
-```bash
+ln -s /etc/nginx/sites-available/videowall /etc/nginx/sites-enabled/
+rm -f /etc/nginx/sites-enabled/default
 nginx -t
+systemctl restart nginx
+```
+
+Buka firewall lokal server untuk port web 80:
+```bash
+ufw allow 80/tcp
 ```
 
 ---
 
-## 6. Prosedur Pembaruan Kode (Deploy / Update)
+## 9. Prosedur Pembaruan Kode (Update Revisi & Fitur Baru)
 
-Jalankan rangkaian perintah berikut di terminal server setiap kali ada pembaruan kode di repositori GitHub:
+Gunakan alur berikut jika terdapat penambahan fitur atau perbaikan kode program:
 
-```bash
-cd /var/www/videowall
+### Langkah di Komputer Laptop Pengembang
+1. Buat perubahan kode dan uji di lingkungan lokal.
+2. Komit dan dorong perubahan ke repositori GitHub:
+   ```bash
+   git add .
+   git commit -m "feat: deskripsi perubahan"
+   git push origin main
+   ```
 
-# 1. Tarik pembaruan kode dari branch main
-git pull origin main
-
-# 2. Perbarui dependensi jika composer.json berubah (opsional)
-composer install --no-dev --optimize-autoloader
-
-# 3. Jalankan migrasi tabel database jika ada skema baru
-php artisan migrate --force
-
-# 4. Bersihkan dan perbarui cache aplikasi
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-
-# 5. Pastikan izin kepemilikan folder tetap aman
-chown -R www-data:www-data storage bootstrap/cache
-chmod -R 775 storage bootstrap/cache
-```
-
----
-
-## 7. Pemantauan & File Log
-
-Gunakan perintah `tail` untuk melihat aktivitas dan kendala sistem:
-
-### Log Error Nginx
-```bash
-tail -f /var/log/nginx/error.log
-```
-
-### Log Akses Nginx
-```bash
-tail -f /var/log/nginx/access.log
-```
-
-### Log Error Laravel
-```bash
-tail -f /var/www/videowall/storage/logs/laravel.log
-```
-
----
-
-## 8. Pencadangan Data (Backup)
-
-### Backup Basis Data ke File SQL
-```bash
-mysqldump -u videowall_user -p videowall_db > /root/backup_videowall_$(date +%F).sql
-```
-
-### Restore Basis Data dari File SQL
-```bash
-mariadb -u videowall_user -p videowall_db < /root/nama_file_backup.sql
-```
-
-### Backup Folder Aset Media
-```bash
-tar -czvf /root/backup_assets_$(date +%F).tar.gz /var/www/videowall/storage/app/public/assets
-```
+### Langkah di Terminal Web Shell Server (`root@e-banner`)
+1. Akses web shell di `https://ssh1.sakera.my.id/`.
+2. Masuk ke folder aplikasi dan tarik kode terbaru:
+   ```bash
+   cd /var/www/videowall
+   git pull origin main
+   ```
+3. Jika terdapat penambahan tabel basis data baru, jalankan migrasi:
+   ```bash
+   php artisan migrate --force
+   ```
+4. Bersihkan cache aplikasi agar perubahan langsung aktif:
+   ```bash
+   php artisan config:clear
+   php artisan route:clear
+   php artisan view:clear
+   ```
+5. Pastikan hak akses folder storage tetap aman:
+   ```bash
+   chown -R www-data:www-data storage bootstrap/cache
+   ```
+Pembaruan kode langsung tayang pada alamat `https://e-banner.sakera.id`.

@@ -1,147 +1,142 @@
-# Manual Book & Panduan Penggunaan E-Banner
+# Buku Panduan Operasional E-Banner Informatika
 
-Panduan ini berisi instruksi operasional untuk pengelola, dosen, dan operator dalam mengoperasikan sistem Digital Signage & Videowall E-Banner Prodi Informatika.
-
----
-
-## 1. Akses Sistem & Autentikasi
-
-### Alamat Web
-Akses aplikasi melalui browser komputer, laptop, atau tablet:
-```text
-https://e-banner.sakera.id
-```
-
-### Akun Administrator Awal
-- **Email**: `admin@visionwall.local`
-- **Password**: `password`
-
-Operator baru dapat mendaftar akun mandiri melalui menu **Daftar Akun** pada halaman login.
+Panduan langkah demi langkah penggunaan sistem e-banner dan videowall untuk operator, staf, dan pengelola kegiatan.
 
 ---
 
-## 2. Navigasi Menu Utama
+## Alur Kerja Sistem
 
-Sistem memiliki tiga modul utama pada bilah navigasi kiri:
-1. **Jadwal & Request**: Mengelola kalender tayang, membuat pengajuan banner, dan memantau status konten.
-2. **Kelola Display**: Mendaftarkan monitor/TV fisik dan mengambil tautan penayangan (single display maupun grid videowall).
-3. **Asset Manager**: Mengunggah dan mengarsipkan file logo, video background, serta gambar latar belakang.
-
----
-
-## 3. Modul Asset Manager
-
-Gunakan modul ini untuk menyiapkan materi visual sebelum membuat jadwal konten.
-
-### Jenis Aset
-- **Logo**: File gambar transparan dengan format PNG, SVG, atau WebP.
-- **Background Video**: File video dengan format MP4, WebM, atau MOV.
-- **Background Gambar**: File gambar dengan format JPG, JPEG, PNG, atau WebP.
-
-### Standar Rekomendasi Media
-- **Resolusi Video/Gambar**: 1920 x 1080 piksel (aspek rasio 16:9).
-- **Bitrate Video**: 3 hingga 5 Mbps.
-- **Ukuran File Maksimal**: 100 MB per file.
-- **Catatan Bitrate**: Ukuran file video di bawah 20 MB mempercepat waktu muat awal pada perangkat Smart TV.
-
-### Langkah Unggah Aset
-1. Buka menu **Asset Manager**.
-2. Klik tombol **Upload Asset Baru** pada kategori aset yang diinginkan.
-3. Masukkan nama identitas aset, pilih file dari komputer, lalu klik **Simpan Asset**.
+Pengoperasian e-banner mengikuti tiga tahapan utama:
+1. **Daftarkan Layar TV**: Tentukan TV fisik yang akan menampilkan banner.
+2. **Buat Request Konten**: Tentukan jam tayang, pilih background, dan atur tata letak teks informasi.
+3. **Tayang Otomatis**: Layar TV memutar banner tepat pada jam mulai dan kembali ke mode standby saat jam selesai.
 
 ---
 
-## 4. Modul Kelola Display
+## Langkah 1: Akses Website & Login
 
-Modul ini memetakan layar fisik TV atau videowall di lingkungan prodi ke dalam sistem.
+1. Buka browser pada komputer atau laptop melalui alamat:
+   ```text
+   https://e-banner.sakera.id
+   ```
+2. Masukkan akun administrator:
+   - **Email**: `admin@visionwall.local`
+   - **Password**: `password`
+3. Klik tombol **Log in** untuk masuk ke dashboard utama.
 
-### Menambahkan Display Baru
-1. Buka menu **Kelola Display**.
-2. Masukkan nama display pada form input (contoh: `TV Koridor Lt.2`, `Videowall Lobby Utama`).
-3. Masukkan deskripsi lokasi fisik.
-4. Klik tombol **Tambah Display**.
-
-### Tautan Penayangan (URL Screen)
-Setiap display memiliki token acak unik untuk menjaga keamanan tautan penayangan.
-- Klik tombol **Buka Layar TV** untuk membuka halaman display di browser perangkat TV.
-- Format URL penayangan:
-  ```text
-  https://e-banner.sakera.id/display/{DEVICE_TOKEN}
-  ```
+Pengguna baru dapat membuat akun mandiri melalui tautan **Belum punya akun? Daftar**.
 
 ---
 
-## 5. Mode Multi-Monitor / Grid Videowall (Tanpa Hardware Tambahan)
+## Langkah 2: Menyiapkan Layar TV (Display)
 
-Sistem memecah satu video berukuran besar ke beberapa monitor secara otomatis menggunakan parameter URL browser, tanpa memerlukan unit hardware video processor tambahan.
+Sebelum menjadwalkan konten, daftarkan lokasi fisik layar TV ke dalam sistem:
 
-### Pilihan Preset Grid
-- **Matrix 2x2 (4 Layar)**: Susunan 2 kolom x 2 baris (total 4 monitor).
-- **Banner 2x1 (2 Layar Horizontal)**: Susunan 2 kolom x 1 baris memanjang ke samping.
-- **Tower 1x2 (2 Layar Vertikal)**: Susunan 1 kolom x 2 baris bertumpuk atas-bawah.
-- **Matrix 3x3 (9 Layar)**: Susunan 3 kolom x 3 baris (total 9 monitor).
+1. Buka menu **Kelola Display** di bilah navigasi kiri.
+2. Pada form **Tambah Display Baru**, isi:
+   - **Nama Display**: contoh `TV Ruang Prodi`, `Lobby Utama`, atau `Lab TIA`.
+   - **Lokasi**: contoh `Gedung RKB Lantai 2`.
+3. Klik tombol **Tambah Display**.
 
-### Langkah Menghubungkan Monitor Grid
-1. Buka menu **Kelola Display**.
-2. Klik tombol **Mode Multi-Monitor / Grid** pada baris display yang dipilih.
-3. Pilih tab preset (contoh: `Matrix 2x2`).
-4. Salin tautan masing-masing kotak (*tile*):
-   - Monitor 1 (Kiri Atas): `.../display/{TOKEN}?grid=2x2&col=0&row=0`
-   - Monitor 2 (Kanan Atas): `.../display/{TOKEN}?grid=2x2&col=1&row=0`
-   - Monitor 3 (Kiri Bawah): `.../display/{TOKEN}?grid=2x2&col=0&row=1`
-   - Monitor 4 (Kanan Bawah): `.../display/{TOKEN}?grid=2x2&col=1&row=1`
-5. Buka tautan tersebut pada browser masing-masing Smart TV atau Mini PC yang terhubung ke monitor.
-6. Tekan tombol **F11** pada keyboard masing-masing layar untuk tampilan layar penuh (*fullscreen*).
-
-### Mesin Sinkronisasi Otomatis
-Sistem menggunakan sinkronisasi waktu master berbasis milidetik. Semua layar menyamakan putaran video secara otomatis. Jika salah satu monitor mengalami jeda jaringan, sistem menyesuaikan kecepatan putar video secara halus tanpa mengulang video dari awal.
+Sistem memberikan sebuah **Device Token** acak untuk setiap display yang didaftarkan. Token ini menjadi kunci akses penayangan di perangkat TV fisik.
 
 ---
 
-## 6. Modul Jadwal & Request Konten
+## Langkah 3: Menyiapkan Aset Visual (Asset Manager)
 
-Modul ini mengatur materi informasi yang tayang pada display target.
+Siapkan logo dan video atau gambar latar belakang sebelum membuat pengajuan konten:
 
-### Tahap 1: Pengaturan Jadwal
-1. Buka menu **Jadwal & Request**, lalu klik **Buat Request**.
-2. Pilih display target.
-3. Masukkan judul agenda atau kegiatan.
-4. Tentukan tanggal penayangan, jam mulai, dan jam selesai.
-
-#### Sistem Validasi Konflik Otomatis
-Sistem memeriksa bentrok jadwal secara otomatis saat form disimpan:
-- Jika jam tayang bertabrakan dengan agenda lain pada display dan tanggal yang sama, sistem menolak pengajuan dan membunyikan alarm peringatan audio.
-- Operator harus memilih jam lain atau menonaktifkan agenda lama terlebih dahulu.
-
-### Tahap 2: Pemilihan Media Latar & Logo
-1. Pilih latar belakang: **Video Background**, **Gambar Background**, atau **Warna Solid**.
-2. Pilih logo instansi atau organisasi yang ingin ditampilkan pada layar (dapat memilih lebih dari satu logo).
-
-### Tahap 3: Penyusunan Teks & Editor Tata Letak
-1. Masukkan baris teks informasi (contoh: teks sambutan, judul seminar, nama narasumber).
-2. Tentukan warna teks untuk setiap baris.
-3. Klik tombol **Fullscreen Editor** untuk menata posisi:
-   - Geser teks dan logo langsung menggunakan mouse (*drag and drop*).
-   - Ubah ukuran elemen melalui kotak penarik di sudut elemen.
-4. Klik tombol **Selesai Edit** pada bilah bawah editor.
-5. Klik **Simpan & Publikasikan Konten**.
+1. Buka menu **Asset Manager** di bilah navigasi kiri.
+2. Tentukan kategori aset:
+   - **Logo**: File lambang instansi atau organisasi (format PNG transparan, WebP, atau SVG).
+   - **Video Background**: File video animasi latar berulang (format MP4 atau WebM, disarankan resolusi 1080p, ukuran file 5 MB sampai 20 MB).
+   - **Image Background**: File gambar statis beresolusi tinggi (format JPG, PNG, atau WebP).
+3. Klik tombol **Upload Asset Baru** pada kotak kategori yang dipilih.
+4. Tuliskan nama aset, pilih file dari komputer, lalu klik **Simpan Asset**.
 
 ---
 
-## 7. Status Siklus Hidup Konten
+## Langkah 4: Membuat Request Konten & Jadwal Tayang
 
-Setiap konten memiliki status operasional otomatis:
-1. **Draft**: Konten tersimpan tetapi belum memasuki rentang jam penayangan.
-2. **Active**: Konten sedang aktif tayang pada layar display sesuai jadwal saat ini.
-3. **Expired**: Waktu tayang konten telah berakhir. Konten otomatis berhenti tayang dan layar kembali ke tampilan **Standby Mode**.
-4. **Berhenti Paksa**: Operator dapat menekan tombol **Stop / Expire Sekarang** pada tabel jadwal untuk menghentikan penayangan sebelum jam selesai.
+1. Buka menu **Jadwal & Request**, lalu klik tombol **Buat Request**.
+2. Form terdiri dari tiga tahapan berurutan:
+
+### Tahap 1: Informasi Dasar & Jadwal
+- **Pilih Display**: Tentukan layar TV target tempat banner akan tayang.
+- **Judul Konten**: Tuliskan nama kegiatan (contoh: `Kuliah Tamu AI 2026`).
+- **Tanggal Tayang**: Pilih tanggal penayangan.
+- **Jam Mulai & Jam Selesai**: Tentukan durasi penayangan banner aktif.
+- Klik **Lanjut: Background & Logo**.
+
+#### Peringatan Bentrok Jadwal
+Sistem melarang dua konten berbeda tayang pada display dan rentang waktu yang sama. Jika waktu bertabrakan dengan jadwal lama, sistem mengeluarkan pesan gagal dan membunyikan alarm peringatan audio. Pilih jam yang masih kosong atau hentikan jadwal lama terlebih dahulu.
+
+### Tahap 2: Background & Logo
+- Pilih satu latar belakang: **Video Background**, **Gambar Background**, atau warna polos.
+- Pilih logo yang ingin dipasang pada layar (dapat mencentang lebih dari satu logo).
+- Klik **Lanjut: Konten & Posisi**.
+
+### Tahap 3: Penyusunan Teks & Layout Visual
+- Ketikkan baris teks informasi pada baris konten (contoh: baris 1 berisi judul acara, baris 2 berisi tanggal dan tempat, baris 3 berisi nama narasumber).
+- Pilih warna teks untuk masing-masing baris.
+- Klik tombol **Fullscreen Editor** untuk menata posisi elemen visual secara presisi:
+  - Tarik teks atau logo ke posisi yang diinginkan menggunakan klik-tahan mouse (*drag and drop*).
+  - Ubah ukuran elemen dengan menarik titik kotak di sudut elemen.
+  - Periksa keselarasan elemen menggunakan garis bantu tengah (*snap lines*).
+- Klik tombol **Selesai Edit** di bilah bawah editor.
+- Klik tombol hijau **Simpan & Publikasikan Konten**.
 
 ---
 
-## 8. Panduan Operasional di Perangkat TV
+## Langkah 5: Cara Kerja Penayangan Otomatis
 
-Saat halaman display terbuka pada Smart TV atau PC TV:
-- **Layar Penuh**: Tekan tombol **F11** pada keyboard atau remote mouse.
-- **Suara / Audio**: Kebijakan browser mematikan suara otomatis (*autoplay mute*). Klik mouse satu kali pada layar atau tekan tombol apa saja pada remote untuk mengaktifkan audio banner.
-- **Mute / Unmute**: Tekan tombol huruf **M** pada keyboard untuk membisukan atau menyalakan suara.
-- **Kursor Mouse**: Kursor otomatis menghilang setelah dua detik tanpa gerakan agar tidak mengganggu tampilan visual.
+Operator tidak perlu menekan tombol sakelar manual saat jadwal tiba. Sistem bekerja secara terjadwal:
+
+- **Sebelum Jam Mulai (Status: Draft)**: Layar TV tetap menampilkan jam digital mode standby.
+- **Tepat Jam Mulai (Status: Active)**: Layar TV secara otomatis berganti menampilkan banner kegiatan lengkap dengan video latar belakang dan teks yang sudah diatur.
+- **Setelah Jam Selesai (Status: Expired)**: Banner otomatis berhenti berputar dan layar TV kembali ke tampilan jam digital standby.
+
+Jika ada agenda darurat yang perlu disudahi lebih awal, klik tombol **Stop / Expire Sekarang** pada tabel jadwal di dashboard.
+
+---
+
+## Langkah 6: Cara Menampilkan di Layar TV / Smart TV Fisik
+
+Buka browser bawaan Smart TV, Android Box, atau PC mini yang terhubung ke monitor TV.
+
+### Opsi A: Satu Layar TV Tunggal
+1. Di komputer operator, buka menu **Kelola Display**.
+2. Salin tautan pada kolom **URL Layar** di baris display bersangkutan:
+   ```text
+   https://e-banner.sakera.id/display/{TOKEN_DISPLAY}
+   ```
+3. Buka tautan tersebut di browser perangkat TV.
+
+---
+
+### Opsi B: Multi-Monitor / Grid Videowall (Gabungan 2 atau 4 Layar TV)
+Gunakan mode ini jika prodi menggabungkan beberapa TV fisik menjadi satu videowall besar tanpa membeli unit hardware video controller tambahan:
+
+1. Buka menu **Kelola Display**, lalu klik tombol **Mode Multi-Monitor / Grid**.
+2. Pilih format susunan monitor:
+   - **Matrix 2x2 (4 Layar)**: Gabungan 2 kolom x 2 baris TV.
+   - **Banner 2x1 (2 Layar Horizontal)**: Gabungan 2 TV berjajar ke samping.
+   - **Tower 1x2 (2 Layar Vertikal)**: Gabungan 2 TV bertumpuk atas-bawah.
+   - **Matrix 3x3 (9 Layar)**: Gabungan 3 kolom x 3 baris TV.
+3. Dialog menampilkan daftar tautan khusus untuk setiap posisi monitor:
+   - **TV 1 (Kiri Atas)**: Buka tautan berakhiran `?grid=2x2&col=0&row=0`
+   - **TV 2 (Kanan Atas)**: Buka tautan berakhiran `?grid=2x2&col=1&row=0`
+   - **TV 3 (Kiri Bawah)**: Buka tautan berakhiran `?grid=2x2&col=0&row=1`
+   - **TV 4 (Kanan Bawah)**: Buka tautan berakhiran `?grid=2x2&col=1&row=1`
+4. Masing-masing monitor otomatis memotong dan menampilkan porsi videonya sendiri secara terkoordinasi.
+5. Putaran video di semua layar diselaraskan secara otomatis oleh jam master server melalui jaringan, menjaga gambar tetap utuh dan seirama.
+
+---
+
+## Langkah 7: Tombol Pengendalian di Layar TV
+
+Gunakan remote mouse atau keyboard nirkabel pada perangkat TV:
+- **Layar Penuh (Fullscreen)**: Tekan tombol **F11** pada keyboard.
+- **Aktivasi Suara (Audio Unmute)**: Browser mematikan audio secara otomatis (*autoplay policy*). Cukup klik mouse satu kali di area layar TV untuk membuka suara banner.
+- **Mute / Unmute Cepat**: Tekan tombol huruf **M** pada keyboard untuk mematikan atau menghidupkan kembali suara.
+- **Kursor Mouse**: Kursor mouse otomatis menghilang dari layar setelah dua detik tanpa sentuhan agar gambar e-banner bersih.
