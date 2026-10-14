@@ -124,6 +124,7 @@ class DisplayPublicController extends Controller
         return response()->file($fullPath, [
             'Content-Type'  => $mimeType,
             'Accept-Ranges' => 'bytes',
+            'Cache-Control' => 'public, max-age=2592000, immutable',
         ]);
     }
 }

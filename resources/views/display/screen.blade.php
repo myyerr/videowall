@@ -158,7 +158,7 @@
     <!-- Master wall container -->
     <div id="wallWrapper">
         <!-- Background layers -->
-        <video id="bgVideo" autoplay loop playsinline></video>
+        <video id="bgVideo" autoplay loop playsinline preload="auto"></video>
         <img id="bgImage" alt="">
 
         <!-- Display Area -->
