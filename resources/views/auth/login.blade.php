@@ -3,10 +3,13 @@
         <div class="auth-card">
             <div class="auth-brand">
                 <div class="auth-brand-icon"><i class="fa-solid fa-tv"></i></div>
+                <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);border-radius:20px;font-size:11px;font-weight:700;color:var(--accent-2);letter-spacing:0.8px;text-transform:uppercase;">
+                    <i class="fa-solid fa-bolt"></i> E-Banner Informatika
+                </div>
                 <div class="auth-title">Masuk ke Dashboard</div>
-                <div class="auth-subtitle">Kelola display, jadwal, dan asset Anda</div>
+                <div class="auth-subtitle">Kelola display TV, jadwal tayang, dan media prodi Anda</div>
                 <a class="auth-link" href="{{ route('register') }}">
-                    {{ __('Dont have an account? Register') }}
+                    {{ __('Belum punya akun? Daftar') }}
                 </a>
             </div>
 

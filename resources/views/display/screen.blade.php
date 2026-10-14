@@ -258,7 +258,7 @@
 
                 const badge = document.getElementById('gridBadge');
                 badge.style.display = 'block';
-                badge.textContent = `VIDEOWALL TILE [Col ${col+1}/${cols}, Row ${row+1}/${rows}]`;
+                badge.textContent = `E-BANNER TILE [Col ${col+1}/${cols}, Row ${row+1}/${rows}]`;
                 setTimeout(() => {
                     badge.style.opacity = '0';
                     setTimeout(() => badge.style.display = 'none', 1000);

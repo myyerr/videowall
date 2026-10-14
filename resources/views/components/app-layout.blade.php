@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $pageTitle ?? 'Videowall' }} — Videowall</title>
+    <title>{{ $pageTitle ?? 'Dashboard' }} — E-Banner Informatika</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -293,8 +293,11 @@
 <!-- ── SIDEBAR (desktop only) ──────────────────────────── -->
 <aside class="sidebar {{ Cookie::get('sidebar_collapsed') === '1' ? 'collapsed' : '' }}" id="sidebar">
     <a href="{{ route('contents.index') }}" class="sidebar-brand">
-        <div class="brand-icon"><i class="fa-solid fa-display"></i></div>
-        <span class="brand-text">Videowall</span>
+        <div class="brand-icon"><i class="fa-solid fa-tv"></i></div>
+        <div style="display:flex;flex-direction:column;line-height:1.15;">
+            <span class="brand-text">E-Banner</span>
+            <span style="font-size:9.5px;font-weight:700;color:var(--accent-2);letter-spacing:1px;">INFORMATIKA</span>
+        </div>
     </a>
     <nav class="sidebar-nav">
         <div class="nav-section-label">Menu Utama</div>
@@ -320,7 +323,7 @@
 <div class="main-wrap" id="mainWrap">
     <header class="topbar">
         <div class="topbar-title">
-            @isset($pageTitle){{ $pageTitle }}@else Videowall @endisset
+            @isset($pageTitle){{ $pageTitle }}@else E-Banner Informatika @endisset
         </div>
         <div class="topbar-actions">
             <div class="user-avatar" id="userAvatarBtn" style="width: 34px; height: 34px; box-shadow: 0 0 10px rgba(99,102,241,0.3); cursor: pointer;" title="User Menu">

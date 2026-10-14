@@ -341,7 +341,7 @@
                             <video id="miniVideoBg" class="tv-bg" autoplay loop muted playsinline style="display:none;object-fit:cover;"></video>
                             <img id="miniImgBg" class="tv-bg" alt="" style="display:none;object-fit:cover;">
                             <div class="tv-standby" id="standby1">
-                                <div class="tv-standby-text">VIDEOWALL</div>
+                                <div class="tv-standby-text">E-BANNER</div>
                             </div>
                             <div class="tv-content-layer" id="miniPreviewContent"></div>
                         </div>
@@ -399,7 +399,7 @@
                             <video id="miniVideoBg2" class="tv-bg" autoplay loop muted playsinline style="display:none;object-fit:cover;"></video>
                             <img id="miniImgBg2" class="tv-bg" alt="" style="display:none;object-fit:cover;">
                             <div class="tv-standby" id="standby2">
-                                <div class="tv-standby-text">VIDEOWALL</div>
+                                <div class="tv-standby-text">E-BANNER</div>
                             </div>
                             <div class="tv-content-layer" id="miniPreviewContent2"></div>
                         </div>

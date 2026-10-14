@@ -248,7 +248,7 @@
                 <div>
                     <span style="font-size:15px;font-weight:700;">
                         <i class="fa-solid fa-table-cells" style="color: var(--accent-2);"></i>
-                        Mode Multi-Monitor / Videowall Matrix
+                        Mode Multi-Monitor / E-Banner Matrix
                     </span>
                     <div style="font-size:11px;color:var(--text-muted);margin-top:2px;" id="gridDisplayName"></div>
                 </div>
@@ -257,7 +257,7 @@
             <div class="modal-body" style="padding:20px;max-height:75vh;overflow-y:auto;">
                 <div style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.6;background:rgba(99,102,241,0.08);padding:10px 14px;border-radius:var(--radius-sm);border:1px solid rgba(99,102,241,0.2);">
                     <i class="fa-solid fa-circle-info" style="color:var(--accent-2);"></i>
-                    <strong>Tanpa Alat Hardware Tambahan:</strong> Buka link tile di masing-masing monitor (misal Smart TV / Browser TV Box). Setiap layar akan otomatis menampilkan bagian yang pas dan tersambung menjadi satu videowall raksasa.
+                    <strong>Tanpa Alat Hardware Tambahan:</strong> Buka link tile di masing-masing monitor (misal Smart TV / Browser TV Box). Setiap layar akan otomatis menampilkan bagian yang pas dan tersambung menjadi satu e-banner raksasa.
                 </div>
 
                 <div style="display:flex;gap:10px;margin-bottom:16px;">

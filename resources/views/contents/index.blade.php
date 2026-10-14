@@ -1,4 +1,4 @@
-<x-app-layout pageTitle="Jadwal & Request Videowall">
+<x-app-layout pageTitle="Jadwal & Request E-Banner">
     <x-slot name="slot">
 
     @push('styles')
