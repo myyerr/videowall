@@ -1,59 +1,60 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Upload Asset Baru
-        </h2>
-    </x-slot>
+<x-app-layout pageTitle="Upload Asset Baru">
+    <x-slot name="slot">
+        <div style="max-width: 600px; margin: 0 auto;">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-cloud-arrow-up" style="color:var(--accent);"></i>
+                    <span class="card-title">Upload Asset Baru</span>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('assets.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
 
-    <div class="py-12">
-        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white shadow-sm rounded-lg p-6">
-                <form action="{{ route('assets.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
-                    @csrf
+                        <div class="form-group">
+                            <label class="form-label">Nama Asset *</label>
+                            <input type="text" name="name" class="form-control" required
+                                   value="{{ old('name') }}" placeholder="Contoh: Logo Kampus">
+                            @error('name') <p class="text-danger" style="font-size:12px;margin-top:4px;color:var(--danger);">{{ $message }}</p> @enderror
+                        </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Nama Asset</label>
-                        <input type="text" name="name" required
-                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm"
-                            placeholder="Contoh: Logo Himatif">
-                        @error('name') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label">Tipe Asset *</label>
+                            <select name="type" id="assetType" class="form-control" required>
+                                <option value="logo" {{ old('type') == 'logo' ? 'selected' : '' }}>Logo (gambar)</option>
+                                <option value="video_background" {{ old('type') == 'video_background' ? 'selected' : '' }}>Video Background</option>
+                                <option value="image_background" {{ old('type') == 'image_background' ? 'selected' : '' }}>Gambar Background</option>
+                            </select>
+                        </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Tipe Asset</label>
-                        <select name="type" id="assetType" required class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm">
-                            <option value="logo">Logo (gambar)</option>
-                            <option value="video_background">Video Background</option>
-                        </select>
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label">File Asset *</label>
+                            <input type="file" name="file" id="fileInput" class="form-control" required>
+                            <p id="fileHint" style="font-size:11px;color:var(--text-3);margin-top:6px;">Format gambar: PNG, JPG, JPEG, SVG, WEBP</p>
+                            @error('file') <p class="text-danger" style="font-size:12px;margin-top:4px;color:var(--danger);">{{ $message }}</p> @enderror
+                        </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">File</label>
-                        <input type="file" name="file" required
-                            class="mt-1 block w-full">
-                        <p id="fileHint" class="text-xs text-gray-500 mt-1">Format gambar: PNG, JPG, JPEG, SVG, WEBP</p>
-                        @error('file') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                    </div>
-
-                    <div class="flex justify-end gap-2 pt-4">
-                        <a href="{{ route('assets.index') }}" class="px-4 py-2 rounded-lg border">Batal</a>
-                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
-                            Upload
-                        </button>
-                    </div>
-                </form>
+                        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:24px;">
+                            <a href="{{ route('assets.index') }}" class="btn btn-ghost">Batal</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Upload
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        document.getElementById('assetType').addEventListener('change', function () {
-            const hint = document.getElementById('fileHint');
-            if (this.value === 'video_background') {
-                hint.textContent = 'Format video: MP4, WEBM, MOV';
-            } else {
-                hint.textContent = 'Format gambar: PNG, JPG, JPEG, SVG, WEBP';
-            }
-        });
-    </script>
+        @push('scripts')
+        <script>
+            document.getElementById('assetType').addEventListener('change', function () {
+                const hint = document.getElementById('fileHint');
+                if (this.value === 'video_background') {
+                    hint.textContent = 'Format video: MP4, WEBM, MOV (Maksimal 100MB)';
+                } else {
+                    hint.textContent = 'Format gambar: PNG, JPG, JPEG, SVG, WEBP (Maksimal 20MB)';
+                }
+            });
+        </script>
+        @endpush
+    </x-slot>
 </x-app-layout>

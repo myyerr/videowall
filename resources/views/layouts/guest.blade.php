@@ -5,40 +5,38 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'E-Banner Informatika') }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Font Awesome (icons used throughout the app) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-        <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <style>
             :root {
-                --bg-base: #0b0d12;
-                --bg-surface: #151823;
-                --bg-elevated: #1c2030;
-                --border: #2a2e3d;
-                --border-accent: #4f46e5;
-                --accent: #6366f1;
-                --accent-2: #818cf8;
-                --accent-glow: rgba(99,102,241,0.12);
-                --text-primary: #f1f2f6;
-                --text-secondary: #c0c4d4;
-                --text-muted: #6b7080;
-                --success: #10b981;
-                --danger: #ef4444;
-                --radius: 14px;
-                --radius-sm: 8px;
+                --bg-body:   #101318;
+                --bg-card:   #1a1f28;
+                --bg-input:  #1e232e;
+                --border-1:  #282d38;
+                --accent:    #3b82f6;
+                --accent-dim: rgba(59,130,246,0.1);
+                --text-1:    #e8eaed;
+                --text-2:    #9aa0ad;
+                --text-3:    #5c6370;
+                --success:   #22c55e;
+                --danger:    #ef4444;
+                --radius:    8px;
+                --radius-sm: 6px;
+                --speed:     .18s ease;
             }
 
             html, body {
-                background: var(--bg-base);
+                background: var(--bg-body);
                 min-height: 100vh;
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                -webkit-font-smoothing: antialiased;
             }
 
             .auth-wrapper {
@@ -49,20 +47,15 @@
                 justify-content: center;
                 padding: 24px;
                 box-sizing: border-box;
-                background:
-                    radial-gradient(circle at 15% 15%, rgba(99,102,241,0.10), transparent 45%),
-                    radial-gradient(circle at 85% 85%, rgba(129,140,248,0.08), transparent 45%),
-                    var(--bg-base);
             }
 
             .auth-card {
                 width: 100%;
-                max-width: 420px;
-                background: var(--bg-surface);
-                border: 1px solid var(--border);
+                max-width: 380px;
+                background: var(--bg-card);
+                border: 1px solid var(--border-1);
                 border-radius: var(--radius);
-                padding: 36px 32px;
-                box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+                padding: 32px 28px;
                 box-sizing: border-box;
             }
 
@@ -75,96 +68,88 @@
             }
 
             .auth-brand-icon {
-                width: 52px;
-                height: 52px;
+                width: 44px; height: 44px;
                 border-radius: var(--radius-sm);
-                background: var(--accent-glow);
+                background: var(--accent);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                color: var(--accent-2);
-                font-size: 22px;
+                color: #fff;
+                font-size: 18px;
             }
 
             .auth-title {
-                font-size: 18px;
+                font-size: 16px;
                 font-weight: 700;
-                color: var(--text-primary);
+                color: var(--text-1);
                 text-align: center;
             }
 
             .auth-subtitle {
                 font-size: 13px;
-                color: var(--text-muted);
+                color: var(--text-3);
                 text-align: center;
                 line-height: 1.5;
             }
 
             .auth-status {
-                background: rgba(16,185,129,0.12);
-                border: 1px solid rgba(16,185,129,0.3);
+                background: rgba(34,197,94,0.08);
+                border: 1px solid rgba(34,197,94,0.2);
                 color: var(--success);
                 border-radius: var(--radius-sm);
-                padding: 10px 14px;
+                padding: 8px 12px;
                 font-size: 13px;
-                margin-bottom: 20px;
+                margin-bottom: 16px;
             }
 
-            .auth-field {
-                margin-bottom: 18px;
-            }
+            .auth-field { margin-bottom: 16px; }
 
             .auth-label {
                 display: block;
-                font-size: 13px;
+                font-size: 12px;
                 font-weight: 600;
-                color: var(--text-secondary);
+                color: var(--text-2);
                 margin-bottom: 6px;
             }
 
             .auth-input {
                 width: 100%;
-                background: var(--bg-base);
-                border: 1px solid var(--border);
+                background: var(--bg-input);
+                border: 1px solid var(--border-1);
                 border-radius: var(--radius-sm);
-                padding: 11px 14px;
-                font-size: 14px;
-                color: var(--text-primary);
-                transition: all 0.15s;
+                padding: 10px 12px;
+                font-size: 13px;
+                color: var(--text-1);
+                transition: border-color var(--speed);
                 box-sizing: border-box;
+                font-family: inherit;
             }
 
-            .auth-input::placeholder { color: var(--text-muted); }
-
-            .auth-input:focus {
-                outline: none;
-                border-color: var(--border-accent);
-                box-shadow: 0 0 0 3px var(--accent-glow);
-            }
+            .auth-input::placeholder { color: var(--text-3); }
+            .auth-input:focus { outline: none; border-color: var(--accent); }
 
             .auth-error {
                 color: var(--danger);
                 font-size: 12px;
-                margin-top: 6px;
+                margin-top: 5px;
             }
 
             .auth-remember {
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                margin-bottom: 22px;
+                margin-bottom: 20px;
             }
 
             .auth-remember input[type="checkbox"] {
-                width: 16px;
-                height: 16px;
+                width: 15px; height: 15px;
                 accent-color: var(--accent);
                 cursor: pointer;
             }
 
             .auth-remember label {
                 font-size: 13px;
-                color: var(--text-secondary);
+                color: var(--text-2);
                 cursor: pointer;
             }
 
@@ -173,67 +158,58 @@
                 align-items: center;
                 justify-content: space-between;
                 gap: 12px;
-                margin-top: 22px;
+                margin-top: 20px;
             }
 
-            .auth-row.auth-row-end {
-                justify-content: flex-end;
-            }
+            .auth-row.auth-row-end { justify-content: flex-end; }
 
             .auth-link {
                 font-size: 13px;
-                color: var(--text-muted);
+                color: var(--text-3);
                 text-decoration: none;
-                transition: color 0.15s;
+                transition: color var(--speed);
                 background: none;
                 border: none;
                 cursor: pointer;
                 padding: 0;
             }
-
-            .auth-link:hover { color: var(--accent-2); }
+            .auth-link:hover { color: var(--accent); }
 
             .auth-submit {
                 background: var(--accent);
                 color: #fff;
                 border: none;
                 border-radius: var(--radius-sm);
-                padding: 11px 24px;
-                font-size: 14px;
+                padding: 10px 20px;
+                font-size: 13px;
                 font-weight: 600;
                 cursor: pointer;
-                transition: all 0.15s;
-                box-shadow: 0 8px 20px rgba(99,102,241,0.3);
+                transition: background var(--speed);
                 white-space: nowrap;
+                font-family: inherit;
             }
-
-            .auth-submit:hover {
-                background: var(--accent-2);
-                transform: translateY(-1px);
-            }
+            .auth-submit:hover { background: #2563eb; }
 
             .auth-body-text {
                 font-size: 13px;
-                color: var(--text-secondary);
+                color: var(--text-2);
                 line-height: 1.6;
-                margin-bottom: 20px;
+                margin-bottom: 16px;
             }
 
             @media (max-width: 400px) {
-                .auth-card { padding: 28px 22px; }
-
+                .auth-card { padding: 24px 20px; }
                 .auth-row:not(.auth-row-end) {
                     flex-direction: column-reverse;
                     align-items: stretch;
-                    gap: 14px;
+                    gap: 12px;
                 }
-
-                .auth-row .auth-submit { width: 100%; }
+                .auth-row .auth-submit { width: 100%; text-align: center; }
                 .auth-row:not(.auth-row-end) .auth-link { text-align: center; }
             }
         </style>
     </head>
-    <body class="font-sans antialiased">
+    <body>
         {{ $slot }}
     </body>
-</html> 
+</html>

@@ -1,18 +1,18 @@
 @push('styles')
 <style>
     /* ── WIZARD ──────────────────────────────────────────── */
-    .wizard-steps { display:flex; align-items:center; gap:0; margin-bottom:28px; }
-    .step-item { display:flex; align-items:center; gap:10px; flex:1; }
-    .step-num { width:32px; height:32px; border-radius:50%; background:var(--bg-elevated); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--text-muted); flex-shrink:0; transition:all 0.3s; }
-    .step-label { font-size:13px; font-weight:600; color:var(--text-muted); transition:color 0.3s; }
-    .step-line { flex:1; height:2px; background:var(--border); margin:0 8px; max-width:60px; }
+    .wizard-steps { display:flex; align-items:center; gap:0; margin-bottom:24px; }
+    .step-item { display:flex; align-items:center; gap:10px; }
+    .step-num { width:28px; height:28px; border-radius:50%; background:var(--bg-card); border:1px solid var(--border-1); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--text-3); flex-shrink:0; transition:all 0.2s; }
+    .step-label { font-size:13px; font-weight:600; color:var(--text-3); transition:color 0.2s; }
+    .step-line { flex:1; height:1px; background:var(--border-1); margin:0 12px; max-width:60px; }
     .step-item.active .step-num { background:var(--accent); border-color:var(--accent); color:#fff; }
-    .step-item.active .step-label { color:var(--text-primary); }
+    .step-item.active .step-label { color:var(--text-1); }
     .step-item.done .step-num { background:var(--success); border-color:var(--success); color:#fff; }
     .step-item.done .step-label { color:var(--success); }
     .step-panel { display:none; }
-    .step-panel.active { display:block; animation:fadeInPanel 0.3s ease; }
-    @keyframes fadeInPanel { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .step-panel.active { display:block; animation:fadeInPanel 0.2s ease; }
+    @keyframes fadeInPanel { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
 
     /* ── LAYOUT ──────────────────────────────────────────── */
     .create-grid { display:grid; grid-template-columns:1fr 400px; gap:20px; }
@@ -20,21 +20,21 @@
 
     /* ── ASSET PICKER ────────────────────────────────────── */
     .asset-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:10px; max-height:220px; overflow-y:auto; padding:4px; }
-    .asset-item { border:2px solid var(--border); border-radius:var(--radius-sm); padding:8px; cursor:pointer; text-align:center; transition:all 0.2s; background:var(--bg-elevated); position:relative; }
-    .asset-item:hover { border-color:var(--accent); }
-    .asset-item.selected { border-color:var(--accent); background:var(--accent-glow); }
-    .asset-item.selected::after { content:'✓'; position:absolute; top:4px; right:6px; font-size:12px; font-weight:700; color:var(--accent); }
+    .asset-item { border:1px solid var(--border-1); border-radius:var(--radius-sm); padding:8px; cursor:pointer; text-align:center; transition:border-color 0.15s, background 0.15s; background:var(--bg-card); position:relative; }
+    .asset-item:hover { border-color:var(--border-2); }
+    .asset-item.selected { border-color:var(--accent); background:var(--accent-dim); }
+    .asset-item.selected::after { content:'✓'; position:absolute; top:4px; right:6px; font-size:11px; font-weight:700; color:var(--accent); }
     .asset-thumb { width:100%; aspect-ratio:1; object-fit:contain; border-radius:4px; }
-    .asset-name { font-size:10px; color:var(--text-secondary); margin-top:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .asset-name { font-size:10px; color:var(--text-2); margin-top:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
     /* ── CONTENT ROWS ────────────────────────────────────── */
-    .content-row { display:flex; gap:10px; align-items:flex-start; background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; margin-bottom:8px; transition:border-color 0.2s; }
-    .content-row:hover { border-color:var(--border-accent); }
-    .row-num { width:24px; height:24px; background:var(--accent-glow); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--accent-2); flex-shrink:0; margin-top:8px; }
+    .content-row { display:flex; gap:10px; align-items:flex-start; background:var(--bg-input); border:1px solid var(--border-1); border-radius:var(--radius-sm); padding:12px; margin-bottom:8px; transition:border-color 0.15s; }
+    .content-row:hover { border-color:var(--border-2); }
+    .row-num { width:24px; height:24px; background:var(--accent-dim); border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--accent); flex-shrink:0; margin-top:8px; }
 
     /* ── TV PREVIEW ──────────────────────────────────────── */
-    .preview-sticky { position:sticky; top:calc(var(--header-h) + 16px); }
-    .tv-container { position:relative; width:100%; aspect-ratio:16/9; background:#000; border:3px solid #1E293B; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.6); }
+    .preview-sticky { position:sticky; top:calc(var(--topbar-h) + 16px); }
+    .tv-container { position:relative; width:100%; aspect-ratio:16/9; background:#000; border:1px solid var(--border-2); border-radius:var(--radius); overflow:hidden; }
     .tv-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1; }
     .tv-content-layer { position:absolute; inset:0; z-index:3; }
     .tv-standby { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:2; transition:opacity 0.3s; }
@@ -42,7 +42,7 @@
     @media(max-width:768px) { .tv-standby-text { font-size:5vw; } }
 
     /* ── FULLSCREEN EDITOR ───────────────────────────────── */
-    #fsEditor { display:none; position:fixed; inset:0; width:100vw; height:100vh; background:#000; z-index:99999; overflow:hidden; }
+    #fsEditor { display:none; position:fixed; inset:0; width:100vw; height:100vh; background:#0b0d11; z-index:99999; overflow:hidden; }
     #fsEditor.visible { display:block; }
     
     #fsContainer {
@@ -62,64 +62,64 @@
     .fs-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1; }
     #fsCanvas { position:absolute; inset:0; z-index:3; touch-action:none; }
 
-    .fs-toolbar { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); z-index:99999; background:rgba(0,0,0,0.88); border:1px solid rgba(255,255,255,0.15); border-radius:12px; padding:10px 20px; display:flex; align-items:center; gap:14px; white-space:nowrap; backdrop-filter:blur(10px); }
+    .fs-toolbar { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); z-index:99999; background:rgba(22,26,34,0.92); border:1px solid var(--border-1); border-radius:var(--radius); padding:8px 16px; display:flex; align-items:center; gap:12px; white-space:nowrap; backdrop-filter:blur(10px); }
     @media(max-width:640px) {
-        .fs-toolbar { gap:8px; padding:8px 12px; font-size:11px; bottom:8px; }
+        .fs-toolbar { gap:8px; padding:6px 10px; font-size:11px; bottom:8px; }
         .fs-hint { display:none; }
     }
-    .fs-hint { color:#888; font-size:11px; }
+    .fs-hint { color:var(--text-3); font-size:11px; }
 
-    /* Draggable elements — NO outline (selection shown by #fsResizeHandles ONLY) */
+    /* Draggable elements */
     .drag-item { position:absolute; transform:translate(-50%,-50%); font-weight:800; white-space:nowrap; text-align:center; line-height:1.3; cursor:grab; user-select:none; text-shadow:0 0 10px rgba(0,0,0,1),2px 2px 8px rgba(0,0,0,0.9); }
     .drag-item:active { cursor:grabbing; }
     .drag-item.type-logo { text-shadow:none; }
 
-    /* 4-corner resize handles overlay — fixed on screen so no z-index fighting */
+    /* 4-corner resize handles overlay */
     #fsResizeHandles {
         position:fixed; display:none; z-index:999999;
-        border:2px solid rgba(99,102,241,0.85);
+        border:1.5px solid var(--accent);
         pointer-events:none;
         border-radius:2px;
     }
     .fs-corner-handle {
-        position:absolute; width:12px; height:12px;
-        background:#fff; border:2px solid #6366F1; border-radius:2px;
+        position:absolute; width:10px; height:10px;
+        background:#fff; border:2px solid var(--accent); border-radius:2px;
         pointer-events:all;
     }
-    .fs-corner-handle.nw { top:-6px; left:-6px; cursor:nw-resize; }
-    .fs-corner-handle.ne { top:-6px; right:-6px; cursor:ne-resize; }
-    .fs-corner-handle.sw { bottom:-6px; left:-6px; cursor:sw-resize; }
-    .fs-corner-handle.se { bottom:-6px; right:-6px; cursor:se-resize; }
+    .fs-corner-handle.nw { top:-5px; left:-5px; cursor:nw-resize; }
+    .fs-corner-handle.ne { top:-5px; right:-5px; cursor:ne-resize; }
+    .fs-corner-handle.sw { bottom:-5px; left:-5px; cursor:sw-resize; }
+    .fs-corner-handle.se { bottom:-5px; right:-5px; cursor:se-resize; }
 
     /* Snap lines */
-    .snap-line { position:absolute; pointer-events:none; z-index:99; display:none; background:rgba(0,220,255,0.85); }
-    #snapV { top:0; left:50%; width:2px; height:100%; transform:translateX(-50%); }
-    #snapH { left:0; top:50%; height:2px; width:100%; transform:translateY(-50%); }
+    .snap-line { position:absolute; pointer-events:none; z-index:99; display:none; background:var(--accent); }
+    #snapV { top:0; left:50%; width:1px; height:100%; transform:translateX(-50%); }
+    #snapH { left:0; top:50%; height:1px; width:100%; transform:translateY(-50%); }
 
     /* Grid */
     #fsGrid { position:absolute; inset:0; pointer-events:none; z-index:98; display:none; }
     #fsGrid.show { display:block; }
-    .fsg-v { position:absolute; top:0; height:100%; width:2px; background:rgba(255,255,255,0.4); box-shadow:0 0 4px rgba(0,0,0,0.5); }
-    .fsg-h { position:absolute; left:0; width:100%; height:2px; background:rgba(255,255,255,0.4); box-shadow:0 0 4px rgba(0,0,0,0.5); }
+    .fsg-v { position:absolute; top:0; height:100%; width:1px; background:rgba(255,255,255,0.2); }
+    .fsg-h { position:absolute; left:0; width:100%; height:1px; background:rgba(255,255,255,0.2); }
 
-    /* Resize bar — fixed so it's always visible above editor */
-    #resizeBar { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); z-index:999999; background:rgba(0,0,0,0.88); border:1px solid rgba(255,255,255,0.15); border-radius:10px; padding:8px 18px; display:none; align-items:center; gap:12px; color:#fff; font-size:13px; backdrop-filter:blur(10px); white-space:nowrap; }
+    /* Resize bar */
+    #resizeBar { position:fixed; bottom:74px; left:50%; transform:translateX(-50%); z-index:999999; background:rgba(22,26,34,0.95); border:1px solid var(--border-1); border-radius:var(--radius); padding:6px 14px; display:none; align-items:center; gap:10px; color:var(--text-1); font-size:12px; backdrop-filter:blur(10px); white-space:nowrap; }
     #resizeBar.visible { display:flex; }
-    .resize-btn { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:6px; width:28px; height:28px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-    .resize-btn:hover { background:rgba(255,255,255,0.25); }
+    .resize-btn { background:var(--bg-hover); border:1px solid var(--border-1); color:var(--text-1); border-radius:4px; width:26px; height:26px; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    .resize-btn:hover { background:var(--border-1); }
     @media(max-width:640px) {
-        #resizeBar { bottom:70px; padding:6px 12px; gap:8px; font-size:12px; }
+        #resizeBar { bottom:64px; padding:6px 10px; gap:6px; font-size:11px; }
     }
 
     /* Upload zone */
-    .upload-zone { border:2px dashed var(--border); border-radius:var(--radius-sm); padding:20px; text-align:center; cursor:pointer; transition:all 0.2s; color:var(--text-muted); font-size:13px; }
-    .upload-zone:hover, .upload-zone.dragover { border-color:var(--accent); background:var(--accent-glow); color:var(--text-primary); }
-    .bg-preview-thumb { width:100%; height:80px; object-fit:cover; border-radius:var(--radius-sm); border:1px solid var(--border); margin-top:8px; }
+    .upload-zone { border:1px dashed var(--border-2); border-radius:var(--radius-sm); padding:18px; text-align:center; cursor:pointer; transition:all 0.15s; color:var(--text-3); font-size:13px; background:var(--bg-input); }
+    .upload-zone:hover, .upload-zone.dragover { border-color:var(--accent); background:var(--accent-dim); color:var(--text-1); }
+    .bg-preview-thumb { width:100%; height:80px; object-fit:cover; border-radius:var(--radius-sm); border:1px solid var(--border-1); margin-top:8px; }
 
     /* Logo chips */
     .logo-chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
-    .logo-chip { display:inline-flex; align-items:center; gap:6px; background:var(--accent-glow); border:1px solid var(--border-accent); border-radius:20px; padding:4px 10px; font-size:11px; color:var(--accent-2); }
-    .logo-chip img { width:18px; height:18px; object-fit:contain; }
+    .logo-chip { display:inline-flex; align-items:center; gap:6px; background:var(--accent-dim); border:1px solid rgba(59,130,246,0.3); border-radius:20px; padding:3px 10px; font-size:11px; color:var(--accent); }
+    .logo-chip img { width:16px; height:16px; object-fit:contain; }
     .logo-chip .remove-chip { cursor:pointer; opacity:0.6; }
     .logo-chip .remove-chip:hover { opacity:1; }
 
@@ -165,7 +165,7 @@
     <div class="step-panel active" id="panel-1">
         <div class="card" style="max-width:640px;">
             <div class="card-header">
-                <i class="fa-solid fa-calendar" style="color:var(--accent-2);"></i>
+                <i class="fa-solid fa-calendar" style="color:var(--accent);"></i>
                 <span class="card-title">Info Jadwal</span>
             </div>
             <div class="card-body">
@@ -230,9 +230,9 @@
                 <!-- Background Card -->
                 <div class="card" style="margin-bottom:16px;">
                     <div class="card-header">
-                        <i class="fa-solid fa-image" style="color:var(--accent-2);"></i>
+                        <i class="fa-solid fa-image" style="color:var(--accent);"></i>
                         <span class="card-title">Background</span>
-                        <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">Video atau Gambar</span>
+                        <span style="font-size:11px;color:var(--text-3);margin-left:auto;">Video atau Gambar</span>
                     </div>
                     <div class="card-body">
                         <div style="margin-bottom:12px;">
@@ -251,7 +251,7 @@
                             <div id="bgVideoPanel">
                                 <div class="asset-grid" id="videoAssetGrid">
                                     <div class="asset-item" data-url="" data-type="none" onclick="selectBg(this)">
-                                        <div style="width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:var(--bg-base);border-radius:4px;color:var(--text-muted);font-size:10px;">Hitam</div>
+                                        <div style="width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:var(--bg-input);border-radius:4px;color:var(--text-3);font-size:10px;">Hitam</div>
                                         <div class="asset-name">Tanpa BG</div>
                                     </div>
                                     @foreach($videos as $v)
@@ -278,12 +278,12 @@
                         </div>
 
                         <div class="upload-zone" id="bgDropZone" onclick="document.getElementById('bgFileInput').click()">
-                            <i class="fa-solid fa-cloud-arrow-up" style="font-size:24px;margin-bottom:8px;"></i>
+                            <i class="fa-solid fa-cloud-arrow-up" style="font-size:20px;margin-bottom:6px;display:block;"></i>
                             <div>Upload background baru</div>
-                            <div style="font-size:11px;margin-top:4px;">Klik atau drag & drop</div>
+                            <div style="font-size:11px;margin-top:2px;color:var(--text-3);">Klik atau drag & drop file</div>
                         </div>
                         <input type="file" id="bgFileInput" accept="video/mp4,video/webm,image/jpeg,image/png,image/webp" style="display:none;">
-                        <div id="bgUploadProgress" style="display:none;margin-top:8px;font-size:12px;color:var(--text-secondary);">
+                        <div id="bgUploadProgress" style="display:none;margin-top:8px;font-size:12px;color:var(--text-2);">
                             <i class="fa-solid fa-spinner fa-spin"></i> Mengupload...
                         </div>
 
@@ -293,9 +293,9 @@
                 <!-- Logo Card -->
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa-solid fa-star" style="color:var(--accent-2);"></i>
+                        <i class="fa-solid fa-star" style="color:var(--accent);"></i>
                         <span class="card-title">Logo</span>
-                        <span style="font-size:11px;color:var(--text-muted);margin-left:auto;">Bisa pilih lebih dari satu</span>
+                        <span style="font-size:11px;color:var(--text-3);margin-left:auto;">Bisa pilih lebih dari satu</span>
                     </div>
                     <div class="card-body">
                         <div class="asset-grid" id="logoAssetGrid">
@@ -312,17 +312,17 @@
                         </div>
 
                         <div style="margin-top:12px;">
-                            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:6px;">Logo terpilih:</div>
+                            <div style="font-size:12px;color:var(--text-2);margin-bottom:6px;">Logo terpilih:</div>
                             <div class="logo-chips" id="selectedLogoChips">
-                                <span style="font-size:11px;color:var(--text-muted);font-style:italic;" id="noLogoText">Belum ada logo dipilih</span>
+                                <span style="font-size:11px;color:var(--text-3);font-style:italic;" id="noLogoText">Belum ada logo dipilih</span>
                             </div>
                         </div>
 
-                        <div class="upload-zone" style="margin-top:12px;" onclick="document.getElementById('logoFileInput').click()">
+                        <div class="upload-zone" style="margin-top:12px;padding:12px;" onclick="document.getElementById('logoFileInput').click()">
                             <i class="fa-solid fa-plus" style="margin-right:6px;"></i> Upload logo baru
                         </div>
                         <input type="file" id="logoFileInput" accept="image/png,image/jpeg,image/webp,image/svg+xml" style="display:none;">
-                        <div id="logoUploadProgress" style="display:none;margin-top:8px;font-size:12px;color:var(--text-secondary);">
+                        <div id="logoUploadProgress" style="display:none;margin-top:8px;font-size:12px;color:var(--text-2);">
                             <i class="fa-solid fa-spinner fa-spin"></i> Mengupload...
                         </div>
                     </div>
@@ -333,7 +333,7 @@
             <div class="preview-sticky">
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa-solid fa-tv" style="color:var(--accent-2);"></i>
+                        <i class="fa-solid fa-tv" style="color:var(--accent);"></i>
                         <span class="card-title">Preview</span>
                     </div>
                     <div class="card-body">
@@ -371,7 +371,7 @@
             <div>
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa-solid fa-font" style="color:var(--accent-2);"></i>
+                        <i class="fa-solid fa-font" style="color:var(--accent);"></i>
                         <span class="card-title">Konten Teks</span>
                         <button type="button" class="btn btn-ghost btn-sm" style="margin-left:auto;" onclick="addContentRow()">
                             <i class="fa-solid fa-plus"></i> Tambah Baris
@@ -379,7 +379,7 @@
                     </div>
                     <div class="card-body">
                         <div id="contentRowsContainer"></div>
-                        <div style="font-size:11px;color:var(--text-muted);margin-top:8px;">
+                        <div style="font-size:11px;color:var(--text-3);margin-top:8px;">
                             <i class="fa-solid fa-circle-info"></i>
                             Atur posisi & ukuran teks lewat Fullscreen Editor →
                         </div>
@@ -391,7 +391,7 @@
             <div class="preview-sticky">
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa-solid fa-tv" style="color:var(--accent-2);"></i>
+                        <i class="fa-solid fa-tv" style="color:var(--accent);"></i>
                         <span class="card-title">Preview</span>
                     </div>
                     <div class="card-body">
@@ -631,7 +631,7 @@ function toggleLogo(el) {
 function renderLogoChips() {
     const chips = document.getElementById('selectedLogoChips');
     if (!selectedLogos.length) {
-        chips.innerHTML = '<span style="font-size:11px;color:var(--text-muted);font-style:italic;" id="noLogoText">Belum ada logo dipilih</span>';
+        chips.innerHTML = '<span style="font-size:11px;color:var(--text-3);font-style:italic;" id="noLogoText">Belum ada logo dipilih</span>';
         return;
     }
     // Langsung overwrite innerHTML — tidak pakai .remove() yang bisa crash
@@ -685,10 +685,10 @@ function renderContentRows() {
                        placeholder="Tulis teks yang ditampilkan..."
                        oninput="updateRowText(${row.id}, this.value)">
                 <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
-                    <label style="font-size:11px;color:var(--text-muted);">Warna:</label>
+                    <label style="font-size:11px;color:var(--text-3);">Warna:</label>
                     <input type="color" value="${row.color}" onchange="updateRowColor(${row.id}, this.value)"
-                           style="width:36px;height:28px;border:none;border-radius:4px;cursor:pointer;padding:2px;background:var(--bg-base);">
-                    <span style="font-size:11px;color:var(--text-muted);">
+                           style="width:36px;height:28px;border:none;border-radius:4px;cursor:pointer;padding:2px;background:var(--bg-input);">
+                    <span style="font-size:11px;color:var(--text-3);">
                         ${row.x ? `Posisi: (${row.x}, ${row.y}) | ${row.fs}vw` : 'Atur posisi di Fullscreen Editor'}
                     </span>
                 </div>

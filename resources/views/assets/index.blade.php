@@ -3,86 +3,109 @@
 
     @push('styles')
     <style>
-        .asset-section { margin-bottom: 32px; }
-
-        .asset-section-header {
+        .asset-header-row {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
+
+        /* Type tabs */
+        .type-tabs-scroll {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            background: var(--bg-card);
+            padding: 4px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-1);
+        }
+        .type-tabs-scroll::-webkit-scrollbar { display: none; }
+
+        .type-tab {
+            padding: 7px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--text-2);
+            transition: all var(--speed);
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .type-tab:hover { color: var(--text-1); background: var(--bg-hover); }
+        .type-tab.active {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .asset-section { display: none; margin-bottom: 24px; }
+        .asset-section.active { display: block; }
 
         .asset-grid-display {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 14px;
         }
 
-        @media (max-width: 640px) {
-            .asset-grid-display {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .asset-grid-display {
-                grid-template-columns: 1fr;
-            }
-        }
-
         .asset-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
+            background: var(--bg-card);
+            border: 1px solid var(--border-1);
             border-radius: var(--radius);
             overflow: hidden;
-            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            transition: border-color var(--speed);
         }
-
-        .asset-card:hover {
-            border-color: var(--border-accent);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
+        .asset-card:hover { border-color: var(--border-2); }
 
         .asset-preview {
             width: 100%;
             aspect-ratio: 16/9;
             object-fit: cover;
-            background: var(--bg-base);
+            background: #000;
             display: block;
         }
-
         .asset-preview.logo-preview {
             aspect-ratio: 1;
             object-fit: contain;
             padding: 16px;
+            background: var(--bg-input);
         }
 
         .asset-info {
             padding: 10px 12px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid var(--border-1);
+            flex: 1;
         }
-
         .asset-name {
             font-size: 12px;
             font-weight: 600;
-            color: var(--text-primary);
+            color: var(--text-1);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-
         .asset-meta {
-            font-size: 10px;
-            color: var(--text-muted);
+            font-size: 11px;
+            color: var(--text-3);
             margin-top: 2px;
         }
 
         .asset-actions {
             padding: 8px 12px;
+            border-top: 1px solid var(--border-1);
             display: flex;
             justify-content: flex-end;
+            background: rgba(0,0,0,0.1);
         }
 
         /* Upload modal */
@@ -90,162 +113,74 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(4px);
             z-index: 999;
             align-items: center;
             justify-content: center;
             padding: 16px;
         }
-
         .modal-overlay.active { display: flex; }
 
         .modal-box {
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
+            background: var(--bg-card);
+            border: 1px solid var(--border-1);
             border-radius: var(--radius);
-            width: 480px;
+            width: 460px;
             max-width: 100%;
-            padding: 0;
             overflow: hidden;
-            max-height: 90vh;
+            box-shadow: 0 16px 36px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
         }
 
         .modal-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-1);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-shrink: 0;
         }
+        .modal-title { font-size: 14px; font-weight: 600; color: var(--text-1); }
 
-        .modal-body { padding: 20px; overflow-y: auto; }
-        .modal-footer { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; flex-shrink: 0; }
+        .modal-body { padding: 18px; }
+        .modal-footer {
+            padding: 12px 18px;
+            border-top: 1px solid var(--border-1);
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            background: var(--bg-sidebar);
+        }
 
         .drop-zone {
-            border: 2px dashed var(--border);
+            border: 1px dashed var(--border-2);
             border-radius: var(--radius-sm);
-            padding: 40px 20px;
+            padding: 30px 16px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-muted);
-            margin-bottom: 16px;
+            transition: all var(--speed);
+            color: var(--text-3);
+            background: var(--bg-input);
+            margin-top: 6px;
         }
-
         .drop-zone:hover, .drop-zone.over {
             border-color: var(--accent);
-            background: var(--accent-glow);
-            color: var(--text-primary);
+            background: var(--accent-dim);
+            color: var(--text-1);
         }
-
         .preview-filename {
             font-size: 12px;
-            color: var(--accent-2);
+            font-weight: 500;
+            color: var(--accent);
             margin-top: 8px;
-        }
-
-        @media (max-width: 480px) {
-            .drop-zone {
-                padding: 28px 16px;
-            }
-
-            .modal-footer {
-                flex-wrap: wrap;
-            }
-
-            .modal-footer .btn {
-                flex: 1 1 auto;
-                justify-content: center;
-            }
-        }
-
-        /* Type tabs */
-        .type-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-
-        .type-tab {
-            padding: 8px 20px;
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border: 1px solid var(--border);
-            background: var(--bg-elevated);
-            color: var(--text-secondary);
-            transition: all 0.2s;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .type-tab.active {
-            background: var(--accent-glow);
-            border-color: var(--border-accent);
-            color: var(--accent-2);
-        }
-
-        .asset-section { display: none; }
-        .asset-section.active { display: block; }
-
-        /* Header row: tabs + upload button */
-        .asset-header-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .type-tabs-scroll {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .type-tabs-scroll::-webkit-scrollbar { display: none; }
-
-        .asset-header-row .btn-primary {
-            flex-shrink: 0;
+            word-break: break-all;
         }
 
         @media (max-width: 640px) {
-            .asset-header-row {
-                flex-wrap: wrap;
-            }
-
-            .type-tabs-scroll {
-                flex: 1 1 100%;
-                order: 2;
-            }
-
-            .asset-header-row .btn-primary {
-                flex: 1 1 100%;
-                order: 1;
-                justify-content: center;
-                padding: 12px;
-            }
-
-            .type-tab {
-                padding: 8px 14px;
-                font-size: 12px;
-            }
-
-            .asset-name {
-                font-size: 11px;
-            }
-
-            .asset-meta {
-                font-size: 9px;
-            }
+            .asset-header-row { flex-direction: column; align-items: stretch; }
+            .type-tabs-scroll { width: 100%; }
+            .asset-grid-display { grid-template-columns: repeat(2, 1fr); gap: 10px; }
         }
     </style>
     @endpush
@@ -288,9 +223,12 @@
                 @endforeach
             </div>
         @else
-            <div style="text-align:center;padding:60px;color:var(--text-muted);">
-                <i class="fa-solid fa-star" style="font-size:40px;opacity:0.2;display:block;margin-bottom:12px;"></i>
-                Belum ada logo. <button class="btn btn-ghost btn-sm" onclick="openUploadModal('logo')" style="display:inline-flex;">Upload sekarang</button>
+            <div class="card" style="text-align:center;padding:48px 20px;color:var(--text-3);">
+                <i class="fa-solid fa-star" style="font-size:32px;opacity:0.3;display:block;margin-bottom:10px;"></i>
+                <div style="font-size:13px;margin-bottom:12px;">Belum ada logo terdaftar.</div>
+                <button class="btn btn-ghost btn-sm" onclick="openUploadModal('logo')" style="display:inline-flex;">
+                    <i class="fa-solid fa-plus"></i> Upload Logo Pertama
+                </button>
             </div>
         @endif
     </div>
@@ -318,9 +256,12 @@
                 @endforeach
             </div>
         @else
-            <div style="text-align:center;padding:60px;color:var(--text-muted);">
-                <i class="fa-solid fa-film" style="font-size:40px;opacity:0.2;display:block;margin-bottom:12px;"></i>
-                Belum ada video background.
+            <div class="card" style="text-align:center;padding:48px 20px;color:var(--text-3);">
+                <i class="fa-solid fa-film" style="font-size:32px;opacity:0.3;display:block;margin-bottom:10px;"></i>
+                <div style="font-size:13px;margin-bottom:12px;">Belum ada video background.</div>
+                <button class="btn btn-ghost btn-sm" onclick="openUploadModal('video_background')" style="display:inline-flex;">
+                    <i class="fa-solid fa-plus"></i> Upload Video
+                </button>
             </div>
         @endif
     </div>
@@ -346,9 +287,12 @@
                 @endforeach
             </div>
         @else
-            <div style="text-align:center;padding:60px;color:var(--text-muted);">
-                <i class="fa-solid fa-image" style="font-size:40px;opacity:0.2;display:block;margin-bottom:12px;"></i>
-                Belum ada gambar background.
+            <div class="card" style="text-align:center;padding:48px 20px;color:var(--text-3);">
+                <i class="fa-solid fa-image" style="font-size:32px;opacity:0.3;display:block;margin-bottom:10px;"></i>
+                <div style="font-size:13px;margin-bottom:12px;">Belum ada gambar background.</div>
+                <button class="btn btn-ghost btn-sm" onclick="openUploadModal('image_background')" style="display:inline-flex;">
+                    <i class="fa-solid fa-plus"></i> Upload Gambar
+                </button>
             </div>
         @endif
     </div>
@@ -357,30 +301,33 @@
     <div class="modal-overlay" id="uploadModal">
         <div class="modal-box">
             <div class="modal-header">
-                <span style="font-size:15px;font-weight:700;">Upload Asset</span>
-                <button onclick="closeUploadModal()" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:18px;">✕</button>
+                <span class="modal-title">Upload Asset</span>
+                <button onclick="closeUploadModal()" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:16px;">✕</button>
             </div>
             <form method="POST" action="{{ route('assets.store') }}" enctype="multipart/form-data" id="uploadForm">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="form-label">Nama Asset *</label>
-                        <input type="text" name="name" id="assetName" class="form-control" required placeholder="Nama deskriptif">
+                        <input type="text" name="name" id="assetName" class="form-control" required placeholder="Contoh: Logo Kampus">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Tipe *</label>
+                        <label class="form-label">Tipe Asset *</label>
                         <select name="type" id="assetType" class="form-control" onchange="updateAccept()">
                             <option value="logo">Logo (PNG/JPG/SVG/WebP)</option>
                             <option value="image_background">Gambar Background (JPG/PNG/WebP)</option>
                             <option value="video_background">Video Background (MP4/WebM)</option>
                         </select>
                     </div>
-                    <div class="drop-zone" id="dropZone" onclick="document.getElementById('assetFile').click()">
-                        <i class="fa-solid fa-cloud-arrow-up" style="font-size:32px;margin-bottom:10px;"></i>
-                        <div>Klik atau drag & drop file di sini</div>
-                        <div id="selectedFileName" class="preview-filename"></div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label">File *</label>
+                        <div class="drop-zone" id="dropZone" onclick="document.getElementById('assetFile').click()">
+                            <i class="fa-solid fa-cloud-arrow-up" style="font-size:24px;margin-bottom:8px;display:block;"></i>
+                            <div>Klik atau drag & drop file ke sini</div>
+                            <div id="selectedFileName" class="preview-filename"></div>
+                        </div>
+                        <input type="file" id="assetFile" name="file" style="display:none;" required onchange="onFileSelected(this)">
                     </div>
-                    <input type="file" id="assetFile" name="file" style="display:none;" required onchange="onFileSelected(this)">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-ghost" onclick="closeUploadModal()">Batal</button>
@@ -403,12 +350,13 @@
             document.querySelectorAll('.asset-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
             document.getElementById('section-' + type).classList.add('active');
-            event.target.classList.add('active');
+            event.currentTarget.classList.add('active');
         }
 
         // Upload Modal
         function openUploadModal(type) {
             if (type) document.getElementById('assetType').value = type;
+            updateAccept();
             document.getElementById('uploadModal').classList.add('active');
         }
 
@@ -465,7 +413,7 @@
             .then(data => {
                 if (data.status) {
                     showToast(data.message, 'success');
-                    setTimeout(() => location.reload(), 800);
+                    setTimeout(() => location.reload(), 600);
                 } else showToast(data.message, 'error');
             });
         }

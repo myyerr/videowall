@@ -3,61 +3,60 @@
 
     @push('styles')
     <style>
-        /* ── STATS ─────────────────────────────────────────── */
-        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
-        @media(max-width: 768px) { .stats-row { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
+        /* ── STATS ───────────────────────────── */
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+        @media(max-width: 768px) { .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
 
-        /* ── GANTT ─────────────────────────────────────────── */
+        /* ── GANTT ───────────────────────────── */
         .gantt-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
+            background: var(--bg-card);
+            border: 1px solid var(--border-1);
             border-radius: var(--radius);
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             overflow: hidden;
         }
 
         .gantt-filters {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-1);
+            display: flex; align-items: center;
+            gap: 10px; flex-wrap: wrap;
         }
 
-        .filter-label { font-size: 12px; font-weight: 700; color: var(--text-secondary); white-space: nowrap; }
+        .filter-label { font-size: 12px; font-weight: 600; color: var(--text-3); white-space: nowrap; }
 
         .date-input {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
+            background: var(--bg-input);
+            border: 1px solid var(--border-1);
             border-radius: var(--radius-sm);
-            padding: 7px 12px;
-            color: var(--text-primary);
-            font-size: 13px;
-            font-family: 'Inter', sans-serif;
+            padding: 6px 10px;
+            color: var(--text-1);
+            font-size: 12px;
+            font-family: inherit;
             outline: none;
-            width: 145px;
+            width: 140px;
             cursor: pointer;
-            transition: border-color 0.2s;
+            transition: border-color .18s;
         }
         .date-input:focus { border-color: var(--accent); }
 
         .shortcut-group {
             display: inline-flex;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-1);
             border-radius: var(--radius-sm);
             overflow: hidden;
         }
         .shortcut-btn {
-            padding: 6px 13px;
-            font-size: 12px;
+            padding: 5px 12px;
+            font-size: 11px;
             font-weight: 600;
-            background: var(--bg-elevated);
-            color: var(--text-secondary);
+            background: var(--bg-input);
+            color: var(--text-3);
             border: none;
-            border-right: 1px solid var(--border);
+            border-right: 1px solid var(--border-1);
             cursor: pointer;
-            transition: all 0.15s;
+            transition: all .15s;
+            font-family: inherit;
         }
         .shortcut-btn:last-child { border-right: none; }
         .shortcut-btn:hover, .shortcut-btn.active {
@@ -75,32 +74,32 @@
         }
 
         .gantt-tbl .col-jam {
-            width: 56px; min-width: 56px;
+            width: 52px; min-width: 52px;
             position: sticky; left: 0; z-index: 3;
-            background: var(--bg-elevated);
-            color: var(--text-secondary);
-            font-weight: 700;
+            background: var(--bg-input);
+            color: var(--text-3);
+            font-weight: 600;
             text-align: center;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-1);
             padding: 3px;
             white-space: nowrap;
         }
 
         .gantt-tbl thead .col-jam {
-            background: var(--bg-base);
-            color: var(--text-muted);
+            background: var(--bg-body);
+            color: var(--text-3);
             font-size: 10px;
             z-index: 5;
         }
 
         .gantt-tbl thead .col-date {
-            width: 34px; min-width: 34px;
+            width: 32px; min-width: 32px;
             text-align: center;
-            padding: 6px 2px;
-            background: var(--bg-elevated);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-            font-weight: 700;
+            padding: 5px 2px;
+            background: var(--bg-input);
+            color: var(--text-2);
+            border: 1px solid var(--border-1);
+            font-weight: 600;
             font-size: 10px;
             white-space: nowrap;
         }
@@ -108,116 +107,84 @@
         .gantt-tbl thead .col-date.today { background: var(--accent) !important; color: #fff !important; }
         .gantt-tbl thead .col-date.weekend { color: var(--warning) !important; }
 
-        .gantt-tbl tbody tr { height: 24px; }
-        /* .gantt-tbl tbody tr:hover td:not(.col-jam) { background: rgba(99,102,241,0.06) !important; } */
+        .gantt-tbl tbody tr { height: 22px; }
 
         .gantt-tbl tbody td.col-cell {
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.03);
             padding: 0;
-            background: var(--bg-base);
+            background: var(--bg-body);
             position: relative;
         }
 
         .gantt-tbl tbody td.gc-active {
-            background: linear-gradient(135deg, #10B981, #059669) !important;
+            background: var(--success) !important;
             cursor: pointer;
         }
         .gantt-tbl tbody td.gc-draft {
-            background: linear-gradient(135deg, #6366F1, #4F46E5) !important;
+            background: var(--accent) !important;
             cursor: pointer;
         }
         .gantt-tbl tbody td.gc-expired {
-            background: rgba(107,114,128,0.4) !important;
+            background: rgba(100,116,139,0.3) !important;
         }
 
-        .gantt-tbl tbody td.col-cell.today-col { background: rgba(99,102,241,0.05); }
+        .gantt-tbl tbody td.col-cell.today-col { background: rgba(59,130,246,0.04); }
 
         .gantt-legend {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 10px 20px;
-            background: var(--bg-elevated);
-            border-top: 1px solid var(--border);
+            display: flex; align-items: center;
+            gap: 16px; padding: 8px 16px;
+            background: var(--bg-input);
+            border-top: 1px solid var(--border-1);
             flex-wrap: wrap;
         }
 
         .legend-item {
-            display: flex; align-items: center; gap: 6px;
-            font-size: 11px; color: var(--text-secondary);
+            display: flex; align-items: center; gap: 5px;
+            font-size: 11px; color: var(--text-2);
         }
 
         .legend-dot {
-            width: 12px; height: 12px;
-            border-radius: 3px;
+            width: 10px; height: 10px;
+            border-radius: 2px;
         }
 
         /* Gantt tooltip */
         .gantt-tooltip {
             display: none;
             position: fixed;
-            background: var(--bg-elevated);
-            border: 1px solid var(--border-accent);
-            color: var(--text-primary);
+            background: var(--bg-card);
+            border: 1px solid var(--border-1);
+            color: var(--text-1);
             font-size: 12px;
             border-radius: var(--radius-sm);
-            padding: 10px 14px;
+            padding: 10px 12px;
             z-index: 9999;
             pointer-events: none;
-            max-width: 240px;
+            max-width: 220px;
             line-height: 1.6;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
         }
 
-        /* ── REQUEST TABLE ─────────────────────────────────── */
+        /* ── REQUEST TABLE ───────────────────── */
         .request-table-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
+            background: var(--bg-card);
+            border: 1px solid var(--border-1);
             border-radius: var(--radius);
         }
 
-        /* ── DISPLAY SELECTOR ──────────────────────────────── */
-        .display-tab {
-            display: inline-flex;
-            gap: 8px;
-            padding: 0 20px;
-            border-bottom: 1px solid var(--border);
-            overflow-x: auto;
-        }
-
-        .display-tab-btn {
-            padding: 12px 16px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            background: none;
-            border-top: none; border-left: none; border-right: none;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-
-        .display-tab-btn.active, .display-tab-btn:hover {
-            color: var(--accent-2);
-            border-bottom-color: var(--accent);
-        }
-
         @media (max-width: 768px) {
-            .gantt-filters { flex-direction: column; align-items: stretch; gap: 12px; }
+            .gantt-filters { flex-direction: column; align-items: stretch; gap: 10px; }
             .date-filter-group { display: flex; align-items: center; gap: 8px; width: 100%; }
             .date-input { flex: 1; width: 100% !important; text-align: center; }
             .shortcut-group { width: 100%; display: flex; }
             .shortcut-btn { flex: 1; text-align: center; }
             .gantt-filters > .btn { width: 100%; justify-content: center; margin-left: 0 !important; }
-            
-            .table-filters { flex-direction: column; align-items: stretch; width: 100%; margin-top: 12px; }
+            .table-filters { flex-direction: column; align-items: stretch; width: 100%; margin-top: 10px; }
             .table-filters select { width: 100% !important; }
             .card-header-wrap { flex-wrap: wrap; }
             .hide-mobile { display: none !important; }
             .mobile-only-info { display: block !important; }
-            .gantt-container { padding-bottom: 12px; }
         }
     </style>
     @endpush
@@ -225,7 +192,7 @@
     <!-- Stats -->
     <div class="stats-row">
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(16,185,129,0.15);">
+            <div class="stat-icon" style="background: rgba(34,197,94,0.1);">
                 <i class="fa-solid fa-circle-play" style="color: var(--success);"></i>
             </div>
             <div class="stat-info">
@@ -235,17 +202,17 @@
         </div>
 
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(99,102,241,0.15);">
-                <i class="fa-solid fa-clock" style="color: var(--accent-2);"></i>
+            <div class="stat-icon" style="background: rgba(59,130,246,0.1);">
+                <i class="fa-solid fa-clock" style="color: var(--accent);"></i>
             </div>
             <div class="stat-info">
-                <div class="stat-value" style="color: var(--accent-2);">{{ $stats['draft'] }}</div>
+                <div class="stat-value" style="color: var(--accent);">{{ $stats['draft'] }}</div>
                 <div class="stat-label">Dijadwalkan</div>
             </div>
         </div>
 
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(245,158,11,0.15);">
+            <div class="stat-icon" style="background: rgba(234,179,8,0.1);">
                 <i class="fa-solid fa-calendar-day" style="color: var(--warning);"></i>
             </div>
             <div class="stat-info">
@@ -255,7 +222,7 @@
         </div>
 
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(239,68,68,0.15);">
+            <div class="stat-icon" style="background: rgba(239,68,68,0.08);">
                 <i class="fa-solid fa-clock-rotate-left" style="color: var(--danger);"></i>
             </div>
             <div class="stat-info">
@@ -268,9 +235,9 @@
     <!-- Gantt Chart -->
     <div class="gantt-card">
         <div class="card-header">
-            <i class="fa-solid fa-chart-gantt" style="color: var(--accent-2);"></i>
+            <i class="fa-solid fa-chart-gantt" style="color: var(--accent);"></i>
             <span class="card-title">Kalender Jadwal</span>
-            <div style="margin-left: auto; font-size: 12px; color: var(--text-secondary);">
+            <div style="margin-left: auto; font-size: 11px; color: var(--text-3);">
                 {{ date('d M Y', strtotime($filterFrom)) }} — {{ date('d M Y', strtotime($filterTo)) }}
             </div>
         </div>
@@ -280,7 +247,7 @@
                 <span class="filter-label hide-mobile"><i class="fa-solid fa-calendar"></i> Periode:</span>
                 <input type="text" id="pickerFrom" class="date-input"
                        value="{{ $filterFrom }}" readonly placeholder="yyyy-mm-dd">
-                <span style="font-size: 12px; color: var(--text-muted);">s/d</span>
+                <span style="font-size: 11px; color: var(--text-3);">s/d</span>
                 <input type="text" id="pickerTo" class="date-input"
                        value="{{ $filterTo }}" readonly placeholder="yyyy-mm-dd">
             </div>
@@ -318,7 +285,7 @@
                             @endphp
                             <th class="{{ $thClass }}" title="{{ $dateObj->format('d M Y') }} ({{ $dateObj->isoFormat('ddd') }})">
                                 <div>{{ $dateObj->format('d') }}</div>
-                                <div style="font-size: 9px; opacity: 0.7;">{{ $dateObj->isoFormat('ddd') }}</div>
+                                <div style="font-size: 9px; opacity: 0.6;">{{ $dateObj->isoFormat('ddd') }}</div>
                             </th>
                         @endforeach
                     </tr>
@@ -375,19 +342,19 @@
 
         <div class="gantt-legend">
             <div class="legend-item">
-                <span class="legend-dot" style="background: linear-gradient(135deg, #10B981, #059669);"></span>
+                <span class="legend-dot" style="background: var(--success);"></span>
                 Sedang Tayang
             </div>
             <div class="legend-item">
-                <span class="legend-dot" style="background: linear-gradient(135deg, #6366F1, #4F46E5);"></span>
-                Terjadwal (Draft)
+                <span class="legend-dot" style="background: var(--accent);"></span>
+                Terjadwal
             </div>
             <div class="legend-item">
-                <span class="legend-dot" style="background: rgba(107,114,128,0.4); border: 1px solid var(--border);"></span>
+                <span class="legend-dot" style="background: rgba(100,116,139,0.3); border: 1px solid var(--border-1);"></span>
                 Expired
             </div>
-            <div class="legend-item" style="margin-left: auto; font-size: 10px; color: var(--text-muted);">
-                <i class="fa-solid fa-arrow-pointer"></i> Hover cell untuk detail
+            <div class="legend-item" style="margin-left: auto; font-size: 10px; color: var(--text-3);">
+                <i class="fa-solid fa-arrow-pointer"></i> Hover untuk detail
             </div>
         </div>
     </div>
@@ -398,10 +365,10 @@
     <!-- Request Table -->
     <div class="request-table-card">
         <div class="card-header card-header-wrap">
-            <i class="fa-solid fa-list-check" style="color: var(--accent-2);"></i>
+            <i class="fa-solid fa-list-check" style="color: var(--accent);"></i>
             <span class="card-title">Semua Request</span>
             <form method="GET" action="{{ route('contents.index') }}" class="table-filters" style="margin-left: auto; display: flex; gap: 8px;">
-                <select name="display_id" class="form-control" style="width: 160px; padding: 7px 10px; font-size: 12px;"
+                <select name="display_id" class="form-control" style="width: 150px; padding: 6px 8px; font-size: 12px;"
                         onchange="this.form.submit()">
                     <option value="">Semua Display</option>
                     @foreach($displays as $d)
@@ -410,7 +377,7 @@
                         </option>
                     @endforeach
                 </select>
-                <select name="status" class="form-control" style="width: 140px; padding: 7px 10px; font-size: 12px;"
+                <select name="status" class="form-control" style="width: 130px; padding: 6px 8px; font-size: 12px;"
                         onchange="this.form.submit()">
                     <option value="">Semua Status</option>
                     <option value="active"  {{ request('status') === 'active'  ? 'selected' : '' }}>Sedang Tayang</option>
@@ -436,20 +403,20 @@
                 <tbody>
                     @forelse($contents as $i => $c)
                         <tr>
-                            <td class="hide-mobile" style="color: var(--text-muted);">{{ $contents->firstItem() + $i }}</td>
+                            <td class="hide-mobile" style="color: var(--text-3);">{{ $contents->firstItem() + $i }}</td>
                             <td>
                                 <div style="font-weight: 600; font-size: 13px;">{{ $c->title }}</div>
-                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                                <div style="font-size: 11px; color: var(--text-3); margin-top: 2px;">
                                     <i class="fa-solid fa-user fa-xs"></i>
                                     {{ $c->creator->name ?? '—' }}
                                 </div>
                                 <!-- Mobile Only Info -->
                                 <div style="font-size: 11px; margin-top: 4px; display: none;" class="mobile-only-info">
-                                    <span style="color: var(--accent-2);"><i class="fa-solid fa-tv fa-xs"></i> {{ $c->display->name ?? '—' }}</span>
+                                    <span style="color: var(--accent);"><i class="fa-solid fa-tv fa-xs"></i> {{ $c->display->name ?? '—' }}</span>
                                 </div>
                             </td>
                             <td class="hide-mobile">
-                                <span style="font-size: 12px; background: rgba(99,102,241,0.1); padding: 3px 8px; border-radius: 4px; color: var(--accent-2);">
+                                <span style="font-size: 12px; background: var(--accent-dim); padding: 2px 7px; border-radius: 3px; color: var(--accent);">
                                     <i class="fa-solid fa-tv fa-xs"></i>
                                     {{ $c->display->name ?? '—' }}
                                 </span>
@@ -457,22 +424,22 @@
                             <td style="font-size: 12px;">
                                 @if($c->display_date)
                                     <div style="font-weight: 600;">{{ date('d M Y', strtotime($c->display_date)) }}</div>
-                                    <div style="color: var(--text-muted);">
+                                    <div style="color: var(--text-3);">
                                         {{ substr($c->start_time, 0, 5) }} – {{ substr($c->end_time, 0, 5) }}
                                     </div>
                                 @else
-                                    <span style="color: var(--text-muted);">—</span>
+                                    <span style="color: var(--text-3);">—</span>
                                 @endif
                             </td>
                             <td>
                                 <div style="max-width: 200px;">
                                     @foreach($c->details->take(2) as $d)
-                                        <div style="font-size: 11px; color: {{ $d->color ?? 'var(--text-secondary)' }}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <div style="font-size: 11px; color: {{ $d->color ?? 'var(--text-2)' }}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                             • {{ $d->content_text }}
                                         </div>
                                     @endforeach
                                     @if($c->details->count() > 2)
-                                        <div style="font-size: 10px; color: var(--text-muted);">+{{ $c->details->count() - 2 }} lagi</div>
+                                        <div style="font-size: 10px; color: var(--text-3);">+{{ $c->details->count() - 2 }} lagi</div>
                                     @endif
                                 </div>
                             </td>
@@ -507,9 +474,9 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
-                                <i class="fa-solid fa-inbox" style="font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.4;"></i>
-                                Belum ada request. <a href="{{ route('contents.create') }}" style="color: var(--accent-2);">Buat request baru</a>
+                            <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-3);">
+                                <i class="fa-solid fa-inbox" style="font-size: 28px; margin-bottom: 10px; display: block; opacity: 0.3;"></i>
+                                Belum ada request. <a href="{{ route('contents.create') }}" style="color: var(--accent);">Buat request baru</a>
                             </td>
                         </tr>
                     @endforelse
@@ -518,7 +485,7 @@
         </div>
 
         @if($contents->hasPages())
-            <div style="padding: 16px 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px;">
+            <div style="padding: 14px 16px; border-top: 1px solid var(--border-1); display: flex; justify-content: flex-end; gap: 8px;">
                 {{ $contents->links() }}
             </div>
         @endif
@@ -527,10 +494,9 @@
     @push('scripts')
     <script>
         // ── Date pickers ──────────────────────────────────────────
-        // Simple inline date inputs
         document.querySelectorAll('.date-input').forEach(el => {
             el.type = 'date';
-            el.style.width = '160px';
+            el.style.width = '150px';
         });
 
         // ── Load Gantt ────────────────────────────────────────────
@@ -589,13 +555,13 @@
         function showGanttTip(e, el) {
             const tip    = document.getElementById('ganttTip');
             const status = el.dataset.status;
-            const statusColor = status === 'active' ? '#10B981' : status === 'draft' ? '#6366F1' : '#94A3B8';
+            const statusColor = status === 'active' ? 'var(--success)' : status === 'draft' ? 'var(--accent)' : 'var(--text-3)';
             tip.innerHTML = `
-                <div style="font-weight:700;margin-bottom:4px;">${el.dataset.title}</div>
-                <div style="font-size:11px;color:#94A3B8;margin-bottom:6px;">${el.dataset.display}</div>
+                <div style="font-weight:600;margin-bottom:3px;">${el.dataset.title}</div>
+                <div style="font-size:11px;color:var(--text-3);margin-bottom:5px;">${el.dataset.display}</div>
                 <div style="font-size:11px;"><i class="fa-regular fa-user"></i> ${el.dataset.name}</div>
                 <div style="font-size:11px;"><i class="fa-regular fa-clock"></i> ${el.dataset.start} – ${el.dataset.end}</div>
-                <div style="font-size:11px;margin-top:4px;color:${statusColor};">● ${status.charAt(0).toUpperCase() + status.slice(1)}</div>
+                <div style="font-size:11px;margin-top:3px;color:${statusColor};">● ${status.charAt(0).toUpperCase() + status.slice(1)}</div>
             `;
             tip.style.display = 'block';
             positionTip(e);
@@ -609,8 +575,8 @@
         function positionTip(e) {
             const tip = document.getElementById('ganttTip');
             let x = e.clientX + 15, y = e.clientY + 15;
-            if (x + 250 > window.innerWidth) x = e.clientX - 260;
-            if (y + 140 > window.innerHeight) y = e.clientY - 140;
+            if (x + 230 > window.innerWidth) x = e.clientX - 240;
+            if (y + 130 > window.innerHeight) y = e.clientY - 130;
             tip.style.left = x + 'px';
             tip.style.top  = y + 'px';
         }
